@@ -9,9 +9,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/users")
-@CrossOrigin(origins = "http://localhost:5173") // Adjust according to frontend URL
+@CrossOrigin(origins = "*") // Adjust according to frontend URL
 public class UserController {
 
     @Autowired
@@ -46,9 +48,21 @@ public class UserController {
     public ResponseEntity<?> getUserDetails(@PathVariable String username) {
         try {
             User user = userService.getUserByUsername(username);
+            System.out.println(user);
             return ResponseEntity.ok(user);
         } catch (Exception e) {
             return ResponseEntity.status(404).body("User not found.");
+        }
+    }
+    @GetMapping("/details/{collegeName}")
+    public ResponseEntity<?> getCollegeStudents(@PathVariable String collegeName) {
+
+        try{
+            List<User> perticularCollegeStudent = userService.getUserByCollegeName(collegeName);
+            return ResponseEntity.ok(perticularCollegeStudent);
+        }
+        catch(Exception e){
+            return ResponseEntity.status(400).body("No Student found of entered college name.");
         }
     }
 }

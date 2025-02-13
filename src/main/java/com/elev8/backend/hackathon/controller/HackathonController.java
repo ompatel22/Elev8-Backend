@@ -12,7 +12,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/hackathons")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "http://localhost:5173") // Configure according to frontend
+@CrossOrigin(origins = "*") // Configure according to frontend
 public class HackathonController {
     private final HackathonService hackathonService;
 

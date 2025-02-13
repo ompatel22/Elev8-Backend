@@ -1,23 +1,33 @@
 package com.elev8.backend.registration.service;
 
+import com.elev8.backend.collegechat.services.RoomService;
 import com.elev8.backend.registration.model.User;
 import com.elev8.backend.registration.repository.UserRepository;
 import com.elev8.backend.registration.exception.UserAlreadyExistsException;
 import com.elev8.backend.registration.exception.InvalidCredentialsException;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 import java.util.Optional;
 
+@RequiredArgsConstructor
 @Service
-public class UserService {
+public class    UserService {
 
     @Autowired
     private UserRepository userRepository;
+    private final RoomService roomService;
 
     // Register new user
     public User registerUser(User user) {
         if (userRepository.existsByUsername(user.getUsername())) {
             throw new UserAlreadyExistsException("Username already exists: " + user.getUsername());
+        }
+        List<User> users = this.userRepository.findByCollegeName(user.getCollegeName());
+        if(users.isEmpty()){
+            this.roomService.createRoom(user.getCollegeName());
         }
         return userRepository.save(user);
     }
@@ -48,5 +58,12 @@ public class UserService {
         } else {
             throw new RuntimeException("User not found.");
         }
+    }
+    public List<User> getUserByCollegeName(String collegeName) {
+        List<User> perticularCollegeStudents =userRepository.findByCollegeName(collegeName);
+        if(perticularCollegeStudents.isEmpty()){
+            this.roomService.createRoom(collegeName);
+        }
+        return perticularCollegeStudents;
     }
 }
