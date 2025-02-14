@@ -1,6 +1,6 @@
 package com.elev8.backend.hackathon.controller;
 
-import com.elev8.backend.hackathon.dto.HackathonRequest;
+import com.elev8.backend.hackathon.dto.HackathonDTO;
 import com.elev8.backend.hackathon.model.Hackathon;
 import com.elev8.backend.hackathon.service.HackathonService;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +17,7 @@ public class HackathonController {
     private final HackathonService hackathonService;
 
     @PostMapping
-    public ResponseEntity<Hackathon> createHackathon(@Valid @RequestBody HackathonRequest request) {
+    public ResponseEntity<Hackathon> createHackathon(@Valid @RequestBody HackathonDTO request) {
         return ResponseEntity.ok(hackathonService.createHackathon(request));
     }
 

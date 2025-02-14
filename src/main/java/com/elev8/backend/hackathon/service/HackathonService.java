@@ -1,6 +1,6 @@
 package com.elev8.backend.hackathon.service;
 
-import com.elev8.backend.hackathon.dto.HackathonRequest;
+import com.elev8.backend.hackathon.dto.HackathonDTO;
 import com.elev8.backend.hackathon.model.Hackathon;
 import com.elev8.backend.hackathon.repository.HackathonRepository;
 import com.elev8.backend.hackathon.exception.ValidationException;
@@ -16,7 +16,7 @@ public class HackathonService {
     private final HackathonRepository hackathonRepository;
 
     @Transactional
-    public Hackathon createHackathon(HackathonRequest request) {
+    public Hackathon createHackathon(HackathonDTO request) {
         validateRequest(request);
 
         Hackathon hackathon = new Hackathon();
@@ -52,7 +52,7 @@ public class HackathonService {
         );
     }
 
-    private void validateRequest(HackathonRequest request) {
+    private void validateRequest(HackathonDTO request) {
         if (request.getRegistrationDates().getEnd().isBefore(request.getRegistrationDates().getStart())) {
             throw new ValidationException("End date cannot be before start date");
         }
