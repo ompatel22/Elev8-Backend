@@ -1,5 +1,6 @@
 package com.elev8.backend.hackathon.service;
 
+import com.cloudinary.Cloudinary;
 import com.elev8.backend.hackathon.dto.HackathonDTO;
 import com.elev8.backend.hackathon.model.Hackathon;
 import com.elev8.backend.hackathon.repository.HackathonRepository;
@@ -7,26 +8,37 @@ import com.elev8.backend.hackathon.exception.ValidationException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
 public class HackathonService {
     private final HackathonRepository hackathonRepository;
+    private final Cloudinary cloudinary;
 
     @Transactional
-    public Hackathon createHackathon(HackathonDTO request) {
-        validateRequest(request);
+    public Hackathon createHackathon(HackathonDTO request) throws IOException {
 
+        validateRequest(request);
         Hackathon hackathon = new Hackathon();
         // Map request to entity
+
+        //image-upload
+        //Map data=this.cloudinary.uploader().upload(request.getLogo().getBytes(),Map.of());
+        //String url=data.get("url").toString();
+        //hackathon.setLogo(url);
+        hackathon.setLogo(request.getLogo());
         hackathon.setTitle(request.getTitle());
         hackathon.setOrganization(request.getOrganization());
         hackathon.setTheme(request.getTheme());
         hackathon.setMode(request.getMode());
         hackathon.setAbout(request.getAbout());
-        hackathon.setParticipationType(request.getParticipationType());
+        hackathon.setLocation(request.getLocation());
 
         if (request.getTeamSize() != null) {
             Hackathon.TeamSize teamSize = new Hackathon.TeamSize();
@@ -56,20 +68,21 @@ public class HackathonService {
         if (request.getRegistrationDates().getEnd().isBefore(request.getRegistrationDates().getStart())) {
             throw new ValidationException("End date cannot be before start date");
         }
-
-        if (request.getParticipationType().equals("team")) {
-            if (request.getTeamSize() == null) {
-                throw new ValidationException("Team size is required for team participation");
-            }
-            if (request.getTeamSize().getMax() < request.getTeamSize().getMin()) {
-                throw new ValidationException("Maximum team size cannot be less than minimum team size");
-            }
-        }
     }
 
     public Hackathon getHackathonById(String id) {
         return hackathonRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Hackathon not found with id: " + id));
+    }
+
+    //for testing
+    public Map uploadImage(MultipartFile file){
+        try{
+            Map data = this.cloudinary.uploader().upload(file.getBytes(),Map.of());
+            return data;
+        }catch (IOException e){
+            throw new RuntimeException("Failed to upload image to Cloudinary");
+        }
     }
 }
 

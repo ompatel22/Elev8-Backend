@@ -1,8 +1,10 @@
 package com.elev8.backend.hackathon.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import java.time.LocalDateTime;
 import jakarta.validation.constraints.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @Data
 public class HackathonDTO {
@@ -10,11 +12,16 @@ public class HackathonDTO {
     @Size(max = 100, message = "Title must not exceed 100 characters")
     private String title;
 
+    private String logo;
+
     @NotBlank(message = "Organization is required")
     private String organization;
 
     @NotBlank(message = "Theme is required")
     private String theme;
+
+    @NotBlank(message = "Location is required")
+    private String location;
 
     @NotBlank(message = "Mode is required")
     private String mode;
@@ -46,10 +53,12 @@ public class HackathonDTO {
     public static class RegistrationDates {
         @NotNull(message = "Start date is required")
         @Future(message = "Start date must be in the future")
+        @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
         private LocalDateTime start;
 
         @NotNull(message = "End date is required")
         @Future(message = "End date must be in the future")
+        @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
         private LocalDateTime end;
     }
 }

@@ -14,9 +14,9 @@ public class Hackathon {
     private String title;
     private String organization;
     private String theme;
+    private String location;
     private String mode;          // online/offline
     private String about;
-    private String participationType;  // individual/team
     private TeamSize teamSize;
     private RegistrationDates registrationDates;
     private LocalDateTime createdAt;
