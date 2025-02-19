@@ -1,4 +1,4 @@
-package com.elev8.backend.collegechat.playload;
+package com.elev8.backend.collegechat.payload;
 
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;

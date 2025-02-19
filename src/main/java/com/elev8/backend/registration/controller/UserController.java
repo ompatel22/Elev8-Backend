@@ -9,6 +9,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/users")
@@ -45,11 +47,26 @@ public class UserController {
     public ResponseEntity<?> getUserDetails(@PathVariable String username) {
         try {
             User user = userService.getUserByUsername(username);
-            System.out.println(user);
+            //System.out.println(user);
             return ResponseEntity.ok(user);
         } catch (Exception e) {
             return ResponseEntity.status(404).body("User not found.");
         }
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<?> getAllUsers() {
+        List<User> users = userService.getAllUsers();
+        return ResponseEntity.ok(users);
+    }
+
+    @PutMapping("/{username}")
+    public ResponseEntity<?> updateUserByUsername(@RequestBody User user, @PathVariable String username) {
+        User user1=userService.updateUser(user, username);
+        if(user1==null) {
+            return ResponseEntity.badRequest().body("User not found.");
+        }
+        return ResponseEntity.ok(user1);
     }
 }
 

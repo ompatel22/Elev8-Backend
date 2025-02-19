@@ -29,16 +29,15 @@ public class User {
     private String email;
 
     @NotBlank(message = "College name is required")
-
     private String collegeName;
 
     private String githubUsername;
-
     private String leetcodeUsername;
-
     private String codechefUsername;
 
-    private String hackerrankUsername;
-
-    private String codeforcesUsername;
+    //new
+    private String bio;
+    private String linkedinurl;
+    private String twitterusername;
+    private String instagramusername;
 }

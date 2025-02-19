@@ -16,8 +16,7 @@ import java.util.Optional;
 @Service
 public class UserService {
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
     private final RoomService roomService;
 
     // Register new user
@@ -26,10 +25,10 @@ public class UserService {
             throw new UserAlreadyExistsException("Username already exists: " + user.getUsername());
         }
         List<User> users = this.userRepository.findByCollegeName(user.getCollegeName());
-        if(users.isEmpty()){
-            this.roomService.createRoom(user.getCollegeName(),user);
+        if (users.isEmpty()) {
+            this.roomService.createRoom(user.getCollegeName(), user);
         }
-        this.roomService.joinRoom(user.getCollegeName(),user);
+        this.roomService.joinRoom(user.getCollegeName(), user);
         return userRepository.save(user);
     }
 
@@ -53,11 +52,61 @@ public class UserService {
 
     // Get user details by username
     public User getUserByUsername(String username) {
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("User not found: " + username));
+    }
+
+    public User updateUser(User user, String username) {
         Optional<User> userOptional = userRepository.findByUsername(username);
         if (userOptional.isPresent()) {
-            return userOptional.get();
-        } else {
-            throw new RuntimeException("User not found.");
+            User userToUpdate = userOptional.get();
+
+            if(user.getUsername()!=null) {
+                if (userRepository.existsByUsername(user.getUsername())) {
+                    throw new UserAlreadyExistsException("Username already exists: " + user.getUsername());
+                }
+                userToUpdate.setUsername(user.getUsername());
+            }
+
+            if (user.getDisplayName() != null) {
+                userToUpdate.setDisplayName(user.getDisplayName());
+            }
+            if (user.getEmail() != null) {
+                userToUpdate.setEmail(user.getEmail());
+            }
+            if (user.getPassword() != null) {
+                userToUpdate.setPassword(user.getPassword());
+            }
+            if (user.getCollegeName() != null) {
+                userToUpdate.setCollegeName(user.getCollegeName());
+            }
+            if (user.getBio() != null) {
+                userToUpdate.setBio(user.getBio());
+            }
+            if (user.getGithubUsername() != null) {
+                userToUpdate.setGithubUsername(user.getGithubUsername());
+            }
+            if (user.getLeetcodeUsername() != null) {
+                userToUpdate.setLeetcodeUsername(user.getLeetcodeUsername());
+            }
+            if (user.getLinkedinurl() != null) {
+                userToUpdate.setLinkedinurl(user.getLinkedinurl());
+            }
+            if (user.getCodechefUsername() != null) {
+                userToUpdate.setCodechefUsername(user.getCodechefUsername());
+            }
+            if (user.getInstagramusername() != null) {
+                userToUpdate.setInstagramusername(user.getInstagramusername());
+            }
+            if (user.getTwitterusername() != null) {
+                userToUpdate.setTwitterusername(user.getTwitterusername());
+            }
+            return userRepository.save(userToUpdate);
         }
+        return null;
+    }
+
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
     }
 }
