@@ -14,7 +14,7 @@ import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
-public class    UserService {
+public class UserService {
 
     @Autowired
     private UserRepository userRepository;
@@ -27,8 +27,9 @@ public class    UserService {
         }
         List<User> users = this.userRepository.findByCollegeName(user.getCollegeName());
         if(users.isEmpty()){
-            this.roomService.createRoom(user.getCollegeName());
+            this.roomService.createRoom(user.getCollegeName(),user);
         }
+        this.roomService.joinRoom(user.getCollegeName(),user);
         return userRepository.save(user);
     }
 
@@ -58,12 +59,5 @@ public class    UserService {
         } else {
             throw new RuntimeException("User not found.");
         }
-    }
-    public List<User> getUserByCollegeName(String collegeName) {
-        List<User> perticularCollegeStudents =userRepository.findByCollegeName(collegeName);
-        if(perticularCollegeStudents.isEmpty()){
-            this.roomService.createRoom(collegeName);
-        }
-        return perticularCollegeStudents;
     }
 }

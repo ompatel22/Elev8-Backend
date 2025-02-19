@@ -5,19 +5,16 @@ import com.elev8.backend.registration.service.UserService;
 import com.elev8.backend.registration.exception.UserAlreadyExistsException;
 import com.elev8.backend.registration.exception.InvalidCredentialsException;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/users")
 @CrossOrigin(origins = "*") // Adjust according to frontend URL
 public class UserController {
-
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
 
     // Register endpoint
     @PostMapping("/register")
@@ -54,15 +51,5 @@ public class UserController {
             return ResponseEntity.status(404).body("User not found.");
         }
     }
-    @GetMapping("/details/{collegeName}")
-    public ResponseEntity<?> getCollegeStudents(@PathVariable String collegeName) {
-
-        try{
-            List<User> perticularCollegeStudent = userService.getUserByCollegeName(collegeName);
-            return ResponseEntity.ok(perticularCollegeStudent);
-        }
-        catch(Exception e){
-            return ResponseEntity.status(400).body("No Student found of entered college name.");
-        }
-    }
 }
+

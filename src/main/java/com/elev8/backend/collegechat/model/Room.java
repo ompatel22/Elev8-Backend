@@ -1,5 +1,6 @@
 package com.elev8.backend.collegechat.model;
 
+import com.elev8.backend.registration.model.User;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
@@ -16,6 +17,7 @@ public class Room {
     private String id;
     private String roomId;
     private List<Message> messages = new ArrayList<>();
+    private List<User> users = new ArrayList<>();
 
     public List<Message> getMessages() {
         return messages;
@@ -40,4 +42,8 @@ public class Room {
     public void setId(String id) {
         this.id = id;
     }
+
+    public List<User> getUsers() {return users;}
+
+    public void setUsers(List<User> users) {this.users = users;}
 }

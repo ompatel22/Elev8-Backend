@@ -3,6 +3,7 @@ package com.elev8.backend.collegechat.controller;
 import com.elev8.backend.collegechat.model.Message;
 import com.elev8.backend.collegechat.model.Room;
 import com.elev8.backend.collegechat.repository.RoomRepository;
+import com.elev8.backend.registration.model.User;
 import com.elev8.backend.registration.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +27,7 @@ public class RoomController {
 
     // Create room
     @PostMapping
-    public ResponseEntity<?> createRoom(@RequestBody String roomId) {
+    public ResponseEntity<?> createRoom(@RequestBody String roomId,@RequestBody User user) {
 
         if (roomRepository.findByRoomId(roomId) != null) {
             return ResponseEntity.badRequest().body("Room already exists");
@@ -67,5 +68,15 @@ public class RoomController {
 
         List<Message> paginatedMessages = messages.subList(start, end);
         return ResponseEntity.ok(paginatedMessages);
+    }
+
+    @GetMapping("/{RoomId}/users")
+    public ResponseEntity<List<User>> getUsers(@PathVariable String RoomId) {
+        Room room = roomRepository.findByRoomId(RoomId);
+        if (room == null) {
+            return ResponseEntity.badRequest().build();
+        }
+        List<User> users = room.getUsers();
+        return ResponseEntity.ok(users);
     }
 }
