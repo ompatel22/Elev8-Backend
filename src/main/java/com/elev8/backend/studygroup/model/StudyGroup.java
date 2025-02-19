@@ -14,8 +14,8 @@ import java.util.List;
 public class StudyGroup {
     @Id
     private String id;
-    private String study_group_name;
-    private String study_group_description;
+    private String studyGroupName;
+    private String studyGroupDescription;
     private List<Message> messages = new ArrayList<>();
     private User owner;
     private List<User> members = new ArrayList<>();
@@ -28,20 +28,20 @@ public class StudyGroup {
         this.id = id;
     }
 
-    public String getStudy_group_name() {
-        return study_group_name;
+    public String getStudyGroupName() {
+        return studyGroupName;
     }
 
-    public void setStudy_group_name(String study_group_name) {
-        this.study_group_name = study_group_name;
+    public void setStudyGroupName(String studyGroupName) {
+        this.studyGroupName = studyGroupName;
     }
 
-    public String getStudy_group_description() {
-        return study_group_description;
+    public String getStudyGroupDescription() {
+        return studyGroupDescription;
     }
 
-    public void setStudy_group_description(String study_group_description) {
-        this.study_group_description = study_group_description;
+    public void setStudyGroupDescription(String studyGroupDescription) {
+        this.studyGroupDescription = studyGroupDescription;
     }
 
     public List<Message> getMessages() {
