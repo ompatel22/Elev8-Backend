@@ -1,5 +1,6 @@
 package com.elev8.backend.studygroup.service;
 
+import com.elev8.backend.collegechat.model.Message;
 import com.elev8.backend.registration.model.User;
 import com.elev8.backend.studygroup.model.StudyGroup;
 import com.elev8.backend.studygroup.repository.StudyGroupRepository;
@@ -53,5 +54,21 @@ public class StudyGroupService {
 
     public List<StudyGroup> getAllStudyGroups() {
         return studyGroupRepository.findAll();
+    }
+
+    public List<Message> getAllMessagesOfAStudyGroup(String studyGroupName) {
+        StudyGroup studyGroupEntity = studyGroupRepository.findByStudyGroupName(studyGroupName);
+        if (studyGroupEntity == null) {
+            throw new RuntimeException("Study Group not found");
+        }
+        return studyGroupEntity.getMessages();
+    }
+
+    public List<User> getAllUsersOfStudyGroup(String studyGroupName) {
+        StudyGroup studyGroupEntity = studyGroupRepository.findByStudyGroupName(studyGroupName);
+        if (studyGroupEntity == null) {
+            throw new RuntimeException("Study Group not found");
+        }
+        return studyGroupEntity.getMembers();
     }
 }
