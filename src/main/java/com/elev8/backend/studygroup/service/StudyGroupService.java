@@ -35,6 +35,7 @@ public class StudyGroupService {
 
     public StudyGroup joinStudyGroup(String studyGroupName, User user) {
         System.out.println("Inside joinStudyGroup method");
+        System.out.println(user);
 
         StudyGroup studyGroup = studyGroupRepository.findByStudyGroupName(studyGroupName);
 
