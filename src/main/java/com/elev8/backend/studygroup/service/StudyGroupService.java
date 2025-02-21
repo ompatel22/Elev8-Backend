@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -71,4 +72,18 @@ public class StudyGroupService {
         }
         return studyGroupEntity.getMembers();
     }
+
+    public Optional<User> getUserOfStudyGroup(String studyGroupName, String username) {
+        StudyGroup studyGroupEntity = studyGroupRepository.findByStudyGroupName(studyGroupName);
+
+        if (studyGroupEntity == null) {
+            return Optional.empty(); // Return empty Optional if no study group is found
+        }
+
+        return studyGroupEntity.getMembers()
+                .stream()
+                .filter(user -> user.getUsername().equals(username))
+                .findFirst(); // Return an Optional<User>
+    }
+
 }

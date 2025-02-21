@@ -6,10 +6,12 @@ import com.elev8.backend.studygroup.dto.JoinStudyGroupDTO;
 import com.elev8.backend.studygroup.model.StudyGroup;
 import com.elev8.backend.studygroup.service.StudyGroupService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @RestController
@@ -29,11 +31,11 @@ public class StudyGroupController {
         }
     }
 
-    @PostMapping("/join_study_group")
-    public ResponseEntity<StudyGroup> joinStudyGroup(@RequestBody JoinStudyGroupDTO joinStudyGroupDTO) {
+    @PostMapping("/{study_group_name}/join_study_group")
+    public ResponseEntity<StudyGroup> joinStudyGroup(@PathVariable String study_group_name ,@RequestBody User user) {
         try{
             System.out.println("Hello");
-            StudyGroup studyGroup = this.studyGroupService.joinStudyGroup(joinStudyGroupDTO.getStudyGroupName(),joinStudyGroupDTO.getMember());
+            StudyGroup studyGroup = this.studyGroupService.joinStudyGroup(study_group_name, user);
             return ResponseEntity.ok(studyGroup);
         }
         catch (Exception e){
@@ -74,4 +76,20 @@ public class StudyGroupController {
             return ResponseEntity.badRequest().build();
         }
     }
+
+    @GetMapping("/{studyGroupName}/user/{username}")
+    public ResponseEntity<?> getUserOfStudyGroup(@PathVariable String studyGroupName, @PathVariable String username) {
+        Optional<User> user = studyGroupService.getUserOfStudyGroup(studyGroupName, username);
+
+        if (user.isEmpty()) {
+            return ResponseEntity
+                    .badRequest() // Change from NOT_FOUND (404) to BAD_REQUEST (400)
+                    .body("User not found in the study group: " + studyGroupName);
+        }
+
+        return ResponseEntity.ok(user.get());
+    }
+
+
+
 }
