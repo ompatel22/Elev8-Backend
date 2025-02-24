@@ -2,21 +2,29 @@ package com.elev8.backend.studygroup.service;
 
 import com.elev8.backend.collegechat.model.Message;
 import com.elev8.backend.registration.model.User;
+import com.elev8.backend.registration.repository.UserRepository;
+import com.elev8.backend.registration.service.UserService;
 import com.elev8.backend.studygroup.model.StudyGroup;
 import com.elev8.backend.studygroup.repository.StudyGroupRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
+import java.util.Base64;
+import java.nio.charset.StandardCharsets;
 
 @RequiredArgsConstructor
 @Service
 public class StudyGroupService {
     private final StudyGroupRepository studyGroupRepository;
+    private final UserService userService;
+    private final UserRepository userRepository;
 
-    public StudyGroup createStudyGroup(String studyGroup , String description ,User user ) {
+    public StudyGroup createStudyGroup(String studyGroup , String description ,String userId ) {
         System.out.println("Inside createStudyGroup method");
 
         if(studyGroupRepository.findByStudyGroupName(studyGroup) != null) {
@@ -25,17 +33,17 @@ public class StudyGroupService {
         StudyGroup studyGroupEntity = new StudyGroup();
         studyGroupEntity.setStudyGroupName(studyGroup);
         studyGroupEntity.setStudyGroupDescription(description);
-        studyGroupEntity.setOwner(user);
-        List<User> users = new ArrayList<>();
-        users.add(user);
-        studyGroupEntity.setMembers(users);
+        studyGroupEntity.setOwnerId(userId);
+        List<String> usersId = new ArrayList<>();
+        usersId.add(userId);
+        studyGroupEntity.setMembersId(usersId);
         studyGroupRepository.save(studyGroupEntity);
         return studyGroupEntity;
     }
 
-    public StudyGroup joinStudyGroup(String studyGroupName, User user) {
+    public StudyGroup joinStudyGroup(String studyGroupName, String userId) {
         System.out.println("Inside joinStudyGroup method");
-        System.out.println(user);
+        System.out.println(userId);
 
         StudyGroup studyGroup = studyGroupRepository.findByStudyGroupName(studyGroupName);
 
@@ -43,12 +51,12 @@ public class StudyGroupService {
             throw new RuntimeException("Study Group not found");
         }
 
-        if (studyGroup.getMembers().stream().anyMatch(member -> member.getUsername().equals(user.getUsername()))) {
+        if  (studyGroup.getMembersId().stream().anyMatch(memberId -> memberId.equals(userId))) {
             throw new RuntimeException("User is already a member of this study group");
         }
-        List<User> users = studyGroup.getMembers();
-        users.add(user);
-        studyGroup.setMembers(users);
+        List<String> usersId = studyGroup.getMembersId();
+        usersId.add(userId);
+        studyGroup.setMembersId(usersId);
         studyGroupRepository.save(studyGroup);
 
         return studyGroup;
@@ -71,20 +79,36 @@ public class StudyGroupService {
         if (studyGroupEntity == null) {
             throw new RuntimeException("Study Group not found");
         }
-        return studyGroupEntity.getMembers();
+        List<String> usersId = studyGroupEntity.getMembersId();
+        return userRepository.findAllById(usersId);
     }
 
-    public Optional<User> getUserOfStudyGroup(String studyGroupName, String username) {
-        StudyGroup studyGroupEntity = studyGroupRepository.findByStudyGroupName(studyGroupName);
 
-        if (studyGroupEntity == null) {
-            return Optional.empty(); // Return empty Optional if no study group is found
+    public Optional<User> getUserOfStudyGroup(String studyGroupName, String userId) {
+        // Decode userId if it's Base64-encoded
+        if (userId.contains("=")) {
+            userId = new String(Base64.getDecoder().decode(userId), StandardCharsets.UTF_8);
         }
 
-        return studyGroupEntity.getMembers()
+        System.out.println("Decoded userId: " + userId);
+
+        StudyGroup studyGroupEntity = studyGroupRepository.findByStudyGroupName(studyGroupName);
+        if (studyGroupEntity == null) {
+            return Optional.empty();
+        }
+
+        String finalUserId = userId;
+        Optional<String> membersId = studyGroupEntity.getMembersId()
                 .stream()
-                .filter(user -> user.getUsername().equals(username))
-                .findFirst(); // Return an Optional<User>
+                .filter(memberId -> memberId.equals(finalUserId))
+                .findFirst();
+
+        if (membersId.isPresent()) {
+            return userService.getUserById(userId);
+        }
+        return Optional.empty();
     }
+
+
 
 }

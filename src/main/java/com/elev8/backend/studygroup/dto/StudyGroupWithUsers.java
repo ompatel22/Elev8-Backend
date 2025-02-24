@@ -1,25 +1,16 @@
-package com.elev8.backend.studygroup.model;
+package com.elev8.backend.studygroup.dto;
 
-import com.elev8.backend.collegechat.model.Message;
 import com.elev8.backend.registration.model.User;
-import lombok.Data;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
-
-import java.util.ArrayList;
 import java.util.List;
 
-@Data
-@Document(collection = "study_group")
-public class StudyGroup {
-    @Id
+public class StudyGroupWithUsers {
     private String id;
     private String studyGroupName;
     private String studyGroupDescription;
-    private List<Message> messages = new ArrayList<>();
     private String ownerId;
-    private List<String> membersId = new ArrayList<>();
+    private List<User> members; // List of users instead of just IDs
 
+    // Getters and Setters
     public String getId() {
         return id;
     }
@@ -44,14 +35,6 @@ public class StudyGroup {
         this.studyGroupDescription = studyGroupDescription;
     }
 
-    public List<Message> getMessages() {
-        return messages;
-    }
-
-    public void setMessages(List<Message> messages) {
-        this.messages = messages;
-    }
-
     public String getOwnerId() {
         return ownerId;
     }
@@ -60,11 +43,11 @@ public class StudyGroup {
         this.ownerId = ownerId;
     }
 
-    public List<String> getMembersId() {
-        return membersId;
+    public List<User> getMembers() {
+        return members;
     }
 
-    public void setMembersId(List<String> membersId) {
-        this.membersId = membersId;
+    public void setMembers(List<User> members) {
+        this.members = members;
     }
 }

@@ -2,16 +2,20 @@ package com.elev8.backend.studygroup.controller;
 import com.elev8.backend.collegechat.model.Message;
 import com.elev8.backend.registration.model.User;
 import com.elev8.backend.studygroup.dto.CreateStudyGroupDTO;
-import com.elev8.backend.studygroup.dto.JoinStudyGroupDTO;
 import com.elev8.backend.studygroup.model.StudyGroup;
 import com.elev8.backend.studygroup.service.StudyGroupService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 
 @RequiredArgsConstructor
 @RestController
@@ -22,8 +26,10 @@ public class StudyGroupController {
 
     @PostMapping("/create_study_group")
     public ResponseEntity<StudyGroup> createStudyGroup(@RequestBody CreateStudyGroupDTO createStudyGroupDTO) {
+        System.out.println("createStudyGroupDTO: " + createStudyGroupDTO);
         try{
-            StudyGroup studyGroup = this.studyGroupService.createStudyGroup(createStudyGroupDTO.getStudyGroupName(), createStudyGroupDTO.getStudyGroupDescription(), createStudyGroupDTO.getOwner());
+            System.out.println(createStudyGroupDTO.getOwnerId());
+            StudyGroup studyGroup = this.studyGroupService.createStudyGroup(createStudyGroupDTO.getStudyGroupName(), createStudyGroupDTO.getStudyGroupDescription(), createStudyGroupDTO.getOwnerId());
             return ResponseEntity.ok(studyGroup);
         }
         catch(Exception e){
@@ -31,17 +37,21 @@ public class StudyGroupController {
         }
     }
 
-    @PostMapping("/{study_group_name}/join_study_group")
-    public ResponseEntity<StudyGroup> joinStudyGroup(@PathVariable String study_group_name ,@RequestBody User user) {
-        try{
-            System.out.println("Hello");
-            StudyGroup studyGroup = this.studyGroupService.joinStudyGroup(study_group_name, user);
-            return ResponseEntity.ok(studyGroup);
+    @PostMapping("/{studyGroupName}/join_study_group")
+    public ResponseEntity<?> joinStudyGroup(
+            @PathVariable String studyGroupName,
+            @RequestBody Map<String, String> requestBody) { // Expecting JSON object
+
+        String userId = requestBody.get("userId"); // Extract userId from JSON
+
+        if (userId == null) {
+            return ResponseEntity.badRequest().body("userId is required");
         }
-        catch (Exception e){
-            return ResponseEntity.badRequest().build();
-        }
+
+        StudyGroup updatedStudyGroup = studyGroupService.joinStudyGroup(studyGroupName, userId);
+        return ResponseEntity.ok(updatedStudyGroup);
     }
+
 
     @GetMapping("/get-all-study-groups")
     public ResponseEntity<List<StudyGroup>> getAllStudyGroups() {
@@ -77,18 +87,21 @@ public class StudyGroupController {
         }
     }
 
-    @GetMapping("/{studyGroupName}/user/{username}")
-    public ResponseEntity<?> getUserOfStudyGroup(@PathVariable String studyGroupName, @PathVariable String username) {
-        Optional<User> user = studyGroupService.getUserOfStudyGroup(studyGroupName, username);
-
-        if (user.isEmpty()) {
-            return ResponseEntity
-                    .badRequest() // Change from NOT_FOUND (404) to BAD_REQUEST (400)
-                    .body("User not found in the study group: " + studyGroupName);
+    @GetMapping("/{studyGroupName}/user/{userId}")
+    public ResponseEntity<?> getUserOfStudyGroup(@PathVariable String studyGroupName, @PathVariable String userId) {
+        if (userId.contains("=")) {
+            userId = new String(Base64.getDecoder().decode(userId), StandardCharsets.UTF_8);
         }
+        System.out.println("Decoded userId: " + userId);
 
+        Optional<User> user = studyGroupService.getUserOfStudyGroup(studyGroupName, userId);
+        if (user.isEmpty()) {
+            return ResponseEntity.badRequest().body("User not found in the study group: " + studyGroupName);
+        }
         return ResponseEntity.ok(user.get());
     }
+
+
 
 
 

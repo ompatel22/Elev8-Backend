@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -108,5 +109,16 @@ public class UserService {
 
     public List<User> getAllUsers() {
         return userRepository.findAll();
+    }
+
+    public List<String> getAllUsersId(){
+        return userRepository.findAll().stream().map(User::getId).collect(Collectors.toList());
+    }
+
+    public List<User> getAllUsersById(List<String> usersid) {
+        return userRepository.findAllById(usersid);
+    }
+    public Optional<User> getUserById(String id) {
+        return userRepository.findById(id);
     }
 }
