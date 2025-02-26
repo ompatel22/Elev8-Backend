@@ -6,5 +6,5 @@ import lombok.Data;
 @Data
 public class JoinStudyGroupDTO {
     private String studyGroupName;
-    private User member;
+    private String memberId;
 }

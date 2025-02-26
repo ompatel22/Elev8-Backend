@@ -7,5 +7,5 @@ import lombok.Data;
 public class CreateStudyGroupDTO {
     private String studyGroupName;
     private String studyGroupDescription;
-    private User owner;
+    private String ownerId;
 }
