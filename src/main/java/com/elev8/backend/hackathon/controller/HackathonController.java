@@ -27,22 +27,24 @@ public class HackathonController {
 
     @PostMapping
     public ResponseEntity<Hackathon> createHackathon(@RequestParam(value = "logo", required = false) MultipartFile logo,
-                @RequestParam("data") String jsonData) {
+                                                     @RequestParam("data") String jsonData) {
+
         try {
+
             // Configure date format for parsing
             objectMapper.setDateFormat(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"));
             HackathonDTO hackathonDTO = objectMapper.readValue(jsonData, HackathonDTO.class);
+
             // Process the logo file if it exists
             if (logo != null && !logo.isEmpty()) {
                 // Handle file upload
                 //image-upload
-                Map data=this.cloudinary.uploader().upload(logo.getBytes(),Map.of());
-                String url=data.get("url").toString();
+                Map data = this.cloudinary.uploader().upload(logo.getBytes(), Map.of());
+                String url = data.get("url").toString();
                 hackathonDTO.setLogo(url);
             }
             return ResponseEntity.ok(hackathonService.createHackathon(hackathonDTO));
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
@@ -59,7 +61,7 @@ public class HackathonController {
 
     //for testing
     @PostMapping("/upload/img")
-    public ResponseEntity<?> uploadHackathonImg(@RequestParam("file") MultipartFile file){
+    public ResponseEntity<?> uploadHackathonImg(@RequestParam("file") MultipartFile file) {
         return ResponseEntity.ok(hackathonService.uploadImage(file));
     }
 }
