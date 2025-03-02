@@ -102,6 +102,21 @@ public class UserService {
             if (user.getTwitterusername() != null) {
                 userToUpdate.setTwitterusername(user.getTwitterusername());
             }
+            if(user.getResumeUrl()!=null) {
+                userToUpdate.setResumeUrl(user.getResumeUrl());
+            }
+            if(user.getPortfolioUrl()!=null) {
+                userToUpdate.setPortfolioUrl(user.getPortfolioUrl());
+            }
+            if(user.getGifUrl()!=null) {
+                userToUpdate.setGifUrl(user.getGifUrl());
+            }
+            if (user.getCoverPhotoUrl() != null) {
+                userToUpdate.setCoverPhotoUrl(user.getCoverPhotoUrl());
+            }
+            if(user.getEmoji()!=null) {
+                userToUpdate.setEmoji(user.getEmoji());
+            }
             return userRepository.save(userToUpdate);
         }
         return null;

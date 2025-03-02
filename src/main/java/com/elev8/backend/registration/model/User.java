@@ -40,4 +40,9 @@ public class User {
     private String linkedinurl;
     private String twitterusername;
     private String instagramusername;
+    private String portfolioUrl;
+    private String resumeUrl;
+    private String gifUrl;
+    private String coverPhotoUrl;
+    private String emoji;
 }

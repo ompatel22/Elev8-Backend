@@ -23,15 +23,14 @@ public class HackathonService {
 
     @Transactional
     public Hackathon createHackathon(HackathonDTO request) throws IOException {
-
         validateRequest(request);
         Hackathon hackathon = new Hackathon();
-        // Map request to entity
 
         //image-upload
         //Map data=this.cloudinary.uploader().upload(request.getLogo().getBytes(),Map.of());
         //String url=data.get("url").toString();
         //hackathon.setLogo(url);
+
         hackathon.setLogo(request.getLogo());
         hackathon.setTitle(request.getTitle());
         hackathon.setOrganization(request.getOrganization());
@@ -76,11 +75,11 @@ public class HackathonService {
     }
 
     //for testing
-    public Map uploadImage(MultipartFile file){
-        try{
-            Map data = this.cloudinary.uploader().upload(file.getBytes(),Map.of());
+    public Map uploadImage(MultipartFile file) {
+        try {
+            Map data = this.cloudinary.uploader().upload(file.getBytes(), Map.of());
             return data;
-        }catch (IOException e){
+        } catch (IOException e) {
             throw new RuntimeException("Failed to upload image to Cloudinary");
         }
     }

@@ -28,9 +28,7 @@ public class HackathonController {
     @PostMapping
     public ResponseEntity<Hackathon> createHackathon(@RequestParam(value = "logo", required = false) MultipartFile logo,
                                                      @RequestParam("data") String jsonData) {
-
         try {
-
             // Configure date format for parsing
             objectMapper.setDateFormat(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"));
             HackathonDTO hackathonDTO = objectMapper.readValue(jsonData, HackathonDTO.class);
