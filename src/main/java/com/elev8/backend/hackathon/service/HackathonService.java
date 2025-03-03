@@ -26,11 +26,6 @@ public class HackathonService {
         validateRequest(request);
         Hackathon hackathon = new Hackathon();
 
-        //image-upload
-        //Map data=this.cloudinary.uploader().upload(request.getLogo().getBytes(),Map.of());
-        //String url=data.get("url").toString();
-        //hackathon.setLogo(url);
-
         hackathon.setLogo(request.getLogo());
         hackathon.setTitle(request.getTitle());
         hackathon.setOrganization(request.getOrganization());
@@ -63,6 +58,25 @@ public class HackathonService {
         );
     }
 
+    public List<Hackathon> getPastHackathons() {
+        return hackathonRepository.findByRegistrationDates_EndBeforeOrderByRegistrationDates_EndDesc(
+                LocalDateTime.now()
+        );
+    }
+
+    public List<Hackathon> getUpcomingHackathons() {
+        return hackathonRepository.findByRegistrationDates_StartAfterOrderByRegistrationDates_StartAsc(
+                LocalDateTime.now()
+        );
+    }
+
+    public List<Hackathon> getOngoingHackathons() {
+        LocalDateTime now = LocalDateTime.now();
+        return hackathonRepository.findByRegistrationDates_StartBeforeAndRegistrationDates_EndAfterOrderByRegistrationDates_StartAsc(
+                now, now
+        );
+    }
+
     private void validateRequest(HackathonDTO request) {
         if (request.getRegistrationDates().getEnd().isBefore(request.getRegistrationDates().getStart())) {
             throw new ValidationException("End date cannot be before start date");
@@ -84,4 +98,3 @@ public class HackathonService {
         }
     }
 }
-

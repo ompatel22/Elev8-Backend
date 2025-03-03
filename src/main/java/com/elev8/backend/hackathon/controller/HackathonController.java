@@ -52,6 +52,21 @@ public class HackathonController {
         return ResponseEntity.ok(hackathonService.getAllActiveHackathons());
     }
 
+    @GetMapping("/upcoming")
+    public ResponseEntity<List<Hackathon>> getUpcomingHackathons() {
+        return ResponseEntity.ok(hackathonService.getUpcomingHackathons());
+    }
+
+    @GetMapping("/ongoing")
+    public ResponseEntity<List<Hackathon>> getOngoingHackathons() {
+        return ResponseEntity.ok(hackathonService.getOngoingHackathons());
+    }
+
+    @GetMapping("/past")
+    public ResponseEntity<List<Hackathon>> getPastHackathons() {
+        return ResponseEntity.ok(hackathonService.getPastHackathons());
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<Hackathon> getHackathonById(@PathVariable String id) {
         return ResponseEntity.ok(hackathonService.getHackathonById(id));
