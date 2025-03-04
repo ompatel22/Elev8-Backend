@@ -2,7 +2,9 @@ package com.elev8.backend.hackathon.service;
 
 import com.elev8.backend.hackathon.dto.HackathonDTO;
 import com.elev8.backend.hackathon.dto.HackathonRequestDTO;
+import com.elev8.backend.hackathon.model.Hackathon;
 import com.elev8.backend.hackathon.model.HackathonRequest;
+import com.elev8.backend.hackathon.repository.HackathonRepository;
 import com.elev8.backend.hackathon.repository.HackathonRequestRepository;
 import com.mongodb.lang.Nullable;
 import org.springframework.stereotype.Service;
@@ -16,12 +18,19 @@ import java.util.Stack;
 public class HackathonRequestService {
 
     final private HackathonRequestRepository hackathonRequestRepository;
+    final private HackathonRepository hackathonRepository;
 
-    public HackathonRequestService(HackathonRequestRepository hackathonRequestRepository) {
+    public HackathonRequestService(HackathonRequestRepository hackathonRequestRepository, HackathonRepository hackathonRepository) {
         this.hackathonRequestRepository = hackathonRequestRepository;
+        this.hackathonRepository = hackathonRepository;
     }
 
     public HackathonRequest createHackathonRequest(HackathonRequestDTO hackathonRequestDTO) {
+        Hackathon hackathon = hackathonRepository.findById(hackathonRequestDTO.getHackathonId()).orElse(null);
+        if(hackathon != null) {
+            hackathon.getRequestsToJoin().add(hackathonRequestDTO.getRequestedBy());
+            hackathonRepository.save(hackathon);
+        }
         HackathonRequest hackathonRequest = new HackathonRequest();
         hackathonRequest.setHackathonId(hackathonRequestDTO.getHackathonId());
         hackathonRequest.setHackathonTitle(hackathonRequestDTO.getHackathonTitle());

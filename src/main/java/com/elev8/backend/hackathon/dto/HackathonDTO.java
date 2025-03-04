@@ -3,6 +3,9 @@ package com.elev8.backend.hackathon.dto;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
 import jakarta.validation.constraints.*;
 
 @Data
@@ -60,4 +63,6 @@ public class HackathonDTO {
         @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
         private LocalDateTime end;
     }
+
+    private List<String> requestsToJoin = new ArrayList<>();
 }
