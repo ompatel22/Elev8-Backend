@@ -10,10 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
-import java.util.Base64;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 
@@ -80,8 +77,13 @@ public class StudyGroupController {
     @GetMapping("/{study_group_name}/users")
     public ResponseEntity<List<User>> getAllUsersOfAStudyGroup(@PathVariable String study_group_name) {
         try{
-        List<User> users = this.studyGroupService.getAllUsersOfStudyGroup(study_group_name);
-        return ResponseEntity.ok(users);
+            User owner = this.studyGroupService.getOwnerOfStudyGroup(study_group_name);
+            List<User> users = this.studyGroupService.getAllUsersOfStudyGroup(study_group_name);
+
+            users.remove(owner);
+            users.add(0, owner);
+
+            return ResponseEntity.ok(users);
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().build();
         }

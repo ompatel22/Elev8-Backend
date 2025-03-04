@@ -83,7 +83,14 @@ public class StudyGroupService {
         return userRepository.findAllById(usersId);
     }
 
-
+    public User getOwnerOfStudyGroup(String studyGroupName) {
+        StudyGroup studyGroupEntity = studyGroupRepository.findByStudyGroupName(studyGroupName);
+        if (studyGroupEntity == null) {
+            throw new RuntimeException("Study Group not found");
+        }
+        String userId = studyGroupEntity.getOwnerId();
+        return userRepository.findById(userId).get();
+    }
     public Optional<User> getUserOfStudyGroup(String studyGroupName, String userId) {
         // Decode userId if it's Base64-encoded
         if (userId.contains("=")) {
