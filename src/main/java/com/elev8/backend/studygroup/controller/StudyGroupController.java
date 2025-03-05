@@ -100,6 +100,16 @@ public class StudyGroupController {
         }
     }
 
+    @DeleteMapping("/{studyGroupName}/remove/{userId}")
+    public ResponseEntity<?> deleteUserOfStudyGroup(@PathVariable String studyGroupName, @PathVariable String userId) {
+        try{
+            boolean deleted = this.studyGroupService.removeStudyGroupMember(studyGroupName, userId);
+            return ResponseEntity.ok(deleted);
+        }
+        catch (Exception e){
+            return ResponseEntity.badRequest().build();
+        }
+    }
     @GetMapping("/{studyGroupName}/user/{userId}")
     public ResponseEntity<?> getUserOfStudyGroup(@PathVariable String studyGroupName, @PathVariable String userId) {
         if (userId.contains("=")) {

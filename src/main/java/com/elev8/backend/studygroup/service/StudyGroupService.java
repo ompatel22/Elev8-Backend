@@ -103,6 +103,21 @@ public class StudyGroupService {
         }
         return false;
     }
+
+    public boolean removeStudyGroupMember(String studyGroupName, String userId) {
+        StudyGroup studyGroupEntity = studyGroupRepository.findByStudyGroupName(studyGroupName);
+        if (studyGroupEntity == null) {
+            throw new RuntimeException("Study Group not found");
+        }
+        List<String> usersIds = studyGroupEntity.getMembersId();
+        if(usersIds.contains(userId)) {
+            usersIds.remove(userId);
+            studyGroupEntity.setMembersId(usersIds);
+            studyGroupRepository.save(studyGroupEntity);
+            return true;
+        }
+        return false;
+    }
     public Optional<User> getUserOfStudyGroup(String studyGroupName, String userId) {
         // Decode userId if it's Base64-encoded
         if (userId.contains("=")) {
