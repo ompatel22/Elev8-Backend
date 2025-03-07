@@ -1,15 +1,20 @@
 package com.elev8.backend.studygroup.controller;
+import com.cloudinary.Cloudinary;
 import com.elev8.backend.collegechat.model.Message;
+import com.elev8.backend.hackathon.dto.HackathonDTO;
 import com.elev8.backend.registration.model.User;
 import com.elev8.backend.studygroup.dto.CreateStudyGroupDTO;
 import com.elev8.backend.studygroup.model.StudyGroup;
 import com.elev8.backend.studygroup.service.StudyGroupService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
@@ -20,19 +25,35 @@ import java.nio.charset.StandardCharsets;
 @CrossOrigin(origins = "*")
 public class StudyGroupController {
     private final StudyGroupService studyGroupService;
+    private final ObjectMapper objectMapper;
+    private final Cloudinary cloudinary;
 
     @PostMapping("/create_study_group")
-    public ResponseEntity<StudyGroup> createStudyGroup(@RequestBody CreateStudyGroupDTO createStudyGroupDTO) {
-        System.out.println("createStudyGroupDTO: " + createStudyGroupDTO);
-        try{
-            System.out.println(createStudyGroupDTO.getOwnerId());
-            StudyGroup studyGroup = this.studyGroupService.createStudyGroup(createStudyGroupDTO.getStudyGroupName(), createStudyGroupDTO.getStudyGroupDescription(), createStudyGroupDTO.getOwnerId());
+    public ResponseEntity<StudyGroup> createStudyGroup(
+            @RequestPart("data") String studyGroupData,
+            @RequestPart(value = "icon", required = false) MultipartFile studyGroupLogo) {
+        try {
+            objectMapper.setDateFormat(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"));
+            CreateStudyGroupDTO studyGroupDTO = objectMapper.readValue(studyGroupData, CreateStudyGroupDTO.class);
+
+            if (studyGroupLogo != null && !studyGroupLogo.isEmpty()) {
+                Map data = this.cloudinary.uploader().upload(studyGroupLogo.getBytes(), Map.of());
+                String url = data.get("url").toString();
+                studyGroupDTO.setImageUrl(url);
+            }
+            StudyGroup studyGroup = this.studyGroupService.createStudyGroup(
+                    studyGroupDTO.getStudyGroupName(),
+                    studyGroupDTO.getStudyGroupDescription(),
+                    studyGroupDTO.getOwnerId(),
+                    studyGroupDTO.getImageUrl()
+            );
+
             return ResponseEntity.ok(studyGroup);
-        }
-        catch(Exception e){
+        } catch (Exception e) {
             return ResponseEntity.badRequest().build();
         }
     }
+
 
     @PostMapping("/{studyGroupName}/join_study_group")
     public ResponseEntity<?> joinStudyGroup(
@@ -124,8 +145,17 @@ public class StudyGroupController {
         return ResponseEntity.ok(user.get());
     }
 
-
-
-
+    @GetMapping("/detail/{studyGroupName}")
+    public ResponseEntity<?> getStudyGroupDetail(@PathVariable String studyGroupName) {
+        try {
+            Optional<StudyGroup> studyGroup = studyGroupService.getStudyGroupDetail(studyGroupName);
+            if (studyGroup.isEmpty()) {
+                return ResponseEntity.badRequest().body("StudyGroup not found: " + studyGroupName);
+            }
+            return ResponseEntity.ok(studyGroup.get());
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
 
 }

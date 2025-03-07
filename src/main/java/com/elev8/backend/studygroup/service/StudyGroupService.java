@@ -24,8 +24,9 @@ public class StudyGroupService {
     private final UserService userService;
     private final UserRepository userRepository;
 
-    public StudyGroup createStudyGroup(String studyGroup , String description ,String userId ) {
+    public StudyGroup createStudyGroup(String studyGroup , String description ,String userId ,String imageUrl) {
         System.out.println("Inside createStudyGroup method");
+        System.out.println(imageUrl);
 
         if(studyGroupRepository.findByStudyGroupName(studyGroup) != null) {
             throw new RuntimeException("Study Group name already exists");
@@ -34,6 +35,7 @@ public class StudyGroupService {
         studyGroupEntity.setStudyGroupName(studyGroup);
         studyGroupEntity.setStudyGroupDescription(description);
         studyGroupEntity.setOwnerId(userId);
+        studyGroupEntity.setImageUrl(imageUrl);
         List<String> usersId = new ArrayList<>();
         usersId.add(userId);
         studyGroupEntity.setMembersId(usersId);
@@ -142,7 +144,11 @@ public class StudyGroupService {
         }
         return Optional.empty();
     }
-
-
-
+    public Optional<StudyGroup> getStudyGroupDetail(String studyGroupName) {
+        StudyGroup studyGroupEntity = studyGroupRepository.findByStudyGroupName(studyGroupName);
+        if (studyGroupEntity == null) {
+            return Optional.empty();
+        }
+        return Optional.of(studyGroupEntity);
+    }
 }

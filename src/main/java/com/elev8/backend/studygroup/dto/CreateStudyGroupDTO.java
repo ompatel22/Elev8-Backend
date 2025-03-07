@@ -5,6 +5,7 @@ import lombok.Data;
 
 @Data
 public class CreateStudyGroupDTO {
+    private String imageUrl;
     private String studyGroupName;
     private String studyGroupDescription;
     private String ownerId;

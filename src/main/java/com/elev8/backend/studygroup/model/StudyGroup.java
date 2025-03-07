@@ -19,6 +19,7 @@ public class StudyGroup {
     private List<Message> messages = new ArrayList<>();
     private String ownerId;
     private List<String> membersId = new ArrayList<>();
+    private String imageUrl;
 
     public String getId() {
         return id;
