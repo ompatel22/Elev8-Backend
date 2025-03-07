@@ -4,8 +4,11 @@ import com.cloudinary.Cloudinary;
 import com.elev8.backend.hackathon.dto.HackathonDTO;
 import com.elev8.backend.hackathon.model.Hackathon;
 import com.elev8.backend.hackathon.service.HackathonService;
+import com.elev8.backend.hackathon.service.MailService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -24,6 +27,7 @@ public class HackathonController {
     private final HackathonService hackathonService;
     private final Cloudinary cloudinary;
     private final ObjectMapper objectMapper;
+    private final MailService mailService;
 
     @PostMapping
     public ResponseEntity<Hackathon> createHackathon(@RequestParam(value = "logo", required = false) MultipartFile logo,
@@ -76,5 +80,16 @@ public class HackathonController {
     @PostMapping("/upload/img")
     public ResponseEntity<?> uploadHackathonImg(@RequestParam("file") MultipartFile file) {
         return ResponseEntity.ok(hackathonService.uploadImage(file));
+    }
+
+    //for testing
+    @PostMapping("/mail/send")
+    public ResponseEntity<String> sendHackathonMail(@RequestParam String to, @RequestParam String subject, @RequestParam String body) {
+        try {
+            mailService.sendEmail(to, subject, body);
+            return new ResponseEntity<>("Email sent successfully to " + to, HttpStatus.OK);
+        } catch (MessagingException e) {
+            return new ResponseEntity<>("Failed to send email: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }

@@ -44,6 +44,6 @@ public class HackathonRequestController {
 
     @PutMapping("/request/{id}/{status}")
     public ResponseEntity<?> updateStatus(@PathVariable String id, @PathVariable String status, ServletResponse servletResponse) {
-        return ResponseEntity.ok(hackathonRequestService.getHackathonRequest(id, status));
+        return ResponseEntity.ok(hackathonRequestService.updateHackathonRequest(id, status));
     }
 }
