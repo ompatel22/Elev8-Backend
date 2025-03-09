@@ -21,7 +21,7 @@ public class Hackathon {
     private String about;
     private TeamSize teamSize;
     private RegistrationDates registrationDates;
-//    private HackathonDates hackathonDates;
+    private HackathonDates hackathonDates;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private String createdBy;
@@ -38,11 +38,11 @@ public class Hackathon {
         private LocalDateTime end;
     }
 
-//    @Data
-//    public static class HackathonDates {
-//        private LocalDateTime start;
-//        private LocalDateTime end;
-//    }
+    @Data
+    public static class HackathonDates {
+        private LocalDateTime start;
+        private LocalDateTime end;
+    }
 
     private List<String> requestsToJoin = new ArrayList<>();
 }

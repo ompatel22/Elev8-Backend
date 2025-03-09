@@ -45,6 +45,12 @@ public class HackathonService {
         dates.setStart(request.getRegistrationDates().getStart());
         dates.setEnd(request.getRegistrationDates().getEnd());
         hackathon.setRegistrationDates(dates);
+
+        Hackathon.HackathonDates hackathonDates = new Hackathon.HackathonDates();
+        hackathonDates.setStart(request.getHackathonDates().getStart());
+        hackathonDates.setEnd(request.getHackathonDates().getEnd());
+        hackathon.setHackathonDates(hackathonDates);
+
         hackathon.setCreatedAt(LocalDateTime.now());
         hackathon.setUpdatedAt(LocalDateTime.now());
         hackathon.setCreatedBy(request.getCreatedBy());

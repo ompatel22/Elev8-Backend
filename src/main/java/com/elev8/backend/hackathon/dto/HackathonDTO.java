@@ -40,8 +40,8 @@ public class HackathonDTO {
     @NotNull(message = "Registration dates are required")
     private RegistrationDates registrationDates;
 
-//    @NotNull(message = "Hackathon dates are required")
-//    private HackathonDates hackathonDates;
+    @NotNull(message = "Hackathon dates are required")
+    private HackathonDates hackathonDates;
 
     private String createdBy;
 
@@ -67,18 +67,18 @@ public class HackathonDTO {
         private LocalDateTime end;
     }
 
-//    @Data
-//    public static class HackathonDates{
-//        @NotNull(message = "Hackathon Start date is required")
-//        @Future(message = "Hackathon Start date must be in the future")
-//        @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-//        private LocalDateTime start;
-//
-//        @NotNull(message = "Hackathon End date is required")
-//        @Future(message = "Hackathon End date must be in the future")
-//        @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-//        private LocalDateTime end;
-//    }
+    @Data
+    public static class HackathonDates{
+        @NotNull(message = "Hackathon Start date is required")
+        @Future(message = "Hackathon Start date must be in the future")
+        @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+        private LocalDateTime start;
+
+        @NotNull(message = "Hackathon End date is required")
+        @Future(message = "Hackathon End date must be in the future")
+        @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+        private LocalDateTime end;
+    }
 
     private List<String> requestsToJoin = new ArrayList<>();
 }
