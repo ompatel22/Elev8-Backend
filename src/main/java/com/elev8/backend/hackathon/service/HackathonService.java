@@ -3,8 +3,10 @@ package com.elev8.backend.hackathon.service;
 import com.cloudinary.Cloudinary;
 import com.elev8.backend.hackathon.dto.HackathonDTO;
 import com.elev8.backend.hackathon.model.Hackathon;
+import com.elev8.backend.hackathon.model.HackathonRequest;
 import com.elev8.backend.hackathon.repository.HackathonRepository;
 import com.elev8.backend.hackathon.exception.ValidationException;
+import com.elev8.backend.hackathon.repository.HackathonRequestRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,6 +16,7 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor

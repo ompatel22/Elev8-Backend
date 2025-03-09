@@ -25,6 +25,7 @@ public class Hackathon {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private String createdBy;
+    private int currentTeamSize;
 
     @Data
     public static class TeamSize {
@@ -45,4 +46,6 @@ public class Hackathon {
     }
 
     private List<String> requestsToJoin = new ArrayList<>();
+    private List<String> acceptedUsers = new ArrayList<>();
+    private List<String> rejectedUsers = new ArrayList<>();
 }

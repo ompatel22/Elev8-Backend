@@ -13,4 +13,5 @@ public interface HackathonRequestRepository extends MongoRepository<HackathonReq
     List<HackathonRequest> findByCreatedBy(String createdBy);
     List<HackathonRequest> findByRequestedBy(String requestedBy);
     HackathonRequest getById(String id);
+    List<HackathonRequest> findByHackathonId(String hackathonId);
 }

@@ -18,6 +18,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 import java.util.Stack;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -101,16 +102,53 @@ public class HackathonRequestService {
         return hackathonRequestRepository.findByRequestedBy(requestedBy);
     }
 
-    public HackathonRequest updateHackathonRequest(String id,String status) {
-        HackathonRequest hackathonRequest=hackathonRequestRepository.getById(id);
+    public HackathonRequest updateHackathonRequest(String id, String status) {
+        // Retrieve the hackathon request; throw an exception if not found
+        HackathonRequest hackathonRequest = hackathonRequestRepository.findById(id)
+                .orElse(null);
+
+        // Retrieve the associated hackathon (if exists)
+        Optional<Hackathon> hackathonOpt = hackathonRepository.findById(hackathonRequest.getHackathonId());
+
+        // Update the hackathon request status and save it
         hackathonRequest.setStatus(status);
         hackathonRequestRepository.save(hackathonRequest);
-
-        //sending mail
         sendHackathonRequestStatusEmail(hackathonRequest);
+
+        // If the hackathon exists, update it accordingly
+        if (hackathonOpt.isPresent()) {
+            Hackathon hackathon = hackathonOpt.get();
+
+            // Update based on request status
+            if (status.equalsIgnoreCase("accepted")) {
+                hackathon.setCurrentTeamSize(hackathon.getCurrentTeamSize() + 1);
+                hackathon.getAcceptedUsers().add(hackathonRequest.getRequestedBy());
+            } else if (status.equalsIgnoreCase("rejected")) {
+                hackathon.getRejectedUsers().add(hackathonRequest.getRequestedBy());
+            }
+
+            // If the hackathon has reached max team size, automatically reject all pending requests
+            if (hackathon.getCurrentTeamSize() == hackathon.getTeamSize().getMax()) {
+                List<HackathonRequest> pendingRequests = hackathonRequestRepository.findByHackathonId(hackathon.getId())
+                        .stream()
+                        .filter(req -> req.getStatus().equalsIgnoreCase("pending"))
+                        .collect(Collectors.toList());
+
+                for (HackathonRequest req : pendingRequests) {
+                    req.setStatus("rejected");
+                    hackathonRequestRepository.save(req);
+                    hackathon.getRejectedUsers().add(req.getRequestedBy());
+                    sendHackathonRequestStatusEmail(req);
+                }
+            }
+
+            // Save the updated hackathon once after all changes
+            hackathonRepository.save(hackathon);
+        }
 
         return hackathonRequest;
     }
+
 
     private void sendHackathonRequestStatusEmail(HackathonRequest request) {
         try {
@@ -123,7 +161,7 @@ public class HackathonRequestService {
 
             String toEmail = requestedUser.getEmail();  // Send email to the requester
             boolean isAccepted = request.getStatus().equalsIgnoreCase("Accepted");
-            String statusText = isAccepted ? "Accepted by "+hackathonCreator.getUsername()+" ✅" : "Rejected by "+hackathonCreator.getUsername()+" ❌";
+            String statusText = isAccepted ? "Accepted by " + hackathonCreator.getUsername() + " ✅" : "Rejected by " + hackathonCreator.getUsername() + " ❌";
             String statusColor = isAccepted ? "#28a745" : "#dc3545";
             String subject = "🚀 Hackathon Request " + statusText + " – " + request.getHackathonTitle();
 
