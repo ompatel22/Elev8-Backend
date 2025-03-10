@@ -1,5 +1,4 @@
 package com.elev8.backend.studygroup.service;
-
 import com.elev8.backend.collegechat.model.Message;
 import com.elev8.backend.registration.model.User;
 import com.elev8.backend.registration.repository.UserRepository;
@@ -8,14 +7,11 @@ import com.elev8.backend.studygroup.model.StudyGroup;
 import com.elev8.backend.studygroup.repository.StudyGroupRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
-import java.util.Base64;
-import java.nio.charset.StandardCharsets;
 
 @RequiredArgsConstructor
 @Service
@@ -44,8 +40,6 @@ public class StudyGroupService {
     }
 
     public StudyGroup joinStudyGroup(String studyGroupName, String userId) {
-        System.out.println("Inside joinStudyGroup method");
-        System.out.println(userId);
 
         StudyGroup studyGroup = studyGroupRepository.findByStudyGroupName(studyGroupName);
 
@@ -125,8 +119,6 @@ public class StudyGroupService {
         if (userId.contains("=")) {
             userId = new String(Base64.getDecoder().decode(userId), StandardCharsets.UTF_8);
         }
-
-        System.out.println("Decoded userId: " + userId);
 
         StudyGroup studyGroupEntity = studyGroupRepository.findByStudyGroupName(studyGroupName);
         if (studyGroupEntity == null) {

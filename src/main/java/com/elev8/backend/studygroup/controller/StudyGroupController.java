@@ -58,9 +58,9 @@ public class StudyGroupController {
     @PostMapping("/{studyGroupName}/join_study_group")
     public ResponseEntity<?> joinStudyGroup(
             @PathVariable String studyGroupName,
-            @RequestBody Map<String, String> requestBody) { // Expecting JSON object
+            @RequestBody Map<String, String> requestBody) {
 
-        String userId = requestBody.get("userId"); // Extract userId from JSON
+        String userId = requestBody.get("userId");
 
         if (userId == null) {
             return ResponseEntity.badRequest().body("userId is required");
@@ -136,8 +136,6 @@ public class StudyGroupController {
         if (userId.contains("=")) {
             userId = new String(Base64.getDecoder().decode(userId), StandardCharsets.UTF_8);
         }
-        System.out.println("Decoded userId: " + userId);
-
         Optional<User> user = studyGroupService.getUserOfStudyGroup(studyGroupName, userId);
         if (user.isEmpty()) {
             return ResponseEntity.badRequest().body("User not found in the study group: " + studyGroupName);
