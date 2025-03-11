@@ -12,19 +12,19 @@ import java.util.List;
 @Service
 public class RoomService {
     private final RoomRepository roomRepository;
-    public void createRoom(String collegeName, User user) {
+    public void createRoom(java.lang.String collegeName, String userId) {
         Room room = new Room();
             room.setRoomId(collegeName);
-            List<User> users = room.getUsers();
-            users.add(user);
-            room.setUsers(users);
+            List<String> users = room.getUsersId();
+            users.add(userId);
+            room.setUsersId(users);
             this.roomRepository.save(room);
     }
-    public void joinRoom(String collegeName, User user) {
+    public void joinRoom(String collegeName, String userId) {
         Room room = this.roomRepository.findByRoomId(collegeName);
-        List<User> users = room.getUsers();
-        users.add(user);
-        room.setUsers(users);
+        List<String> users = room.getUsersId();
+        users.add(userId);
+        room.setUsersId(users);
         this.roomRepository.save(room);
     }
 }

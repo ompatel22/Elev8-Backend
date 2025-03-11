@@ -14,10 +14,10 @@ import java.util.List;
 @AllArgsConstructor
 public class Room {
     @Id
-    private String id;
-    private String roomId;
+    private java.lang.String id;
+    private java.lang.String roomId;
     private List<Message> messages = new ArrayList<>();
-    private List<User> users = new ArrayList<>();
+    private List<String> usersId = new ArrayList<>();
 
     public List<Message> getMessages() {
         return messages;
@@ -31,7 +31,7 @@ public class Room {
         return roomId;
     }
 
-    public void setRoomId(String roomId) {
+    public void setRoomId(java.lang.String roomId) {
         this.roomId = roomId;
     }
 
@@ -39,11 +39,11 @@ public class Room {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(java.lang.String id) {
         this.id = id;
     }
 
-    public List<User> getUsers() {return users;}
+    public List<String> getUsersId() {return usersId;}
 
-    public void setUsers(List<User> users) {this.users = users;}
+    public void setUsersId(List<String> usersId) {this.usersId = usersId;}
 }

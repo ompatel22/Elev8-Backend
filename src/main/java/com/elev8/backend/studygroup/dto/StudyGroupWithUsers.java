@@ -4,42 +4,42 @@ import com.elev8.backend.registration.model.User;
 import java.util.List;
 
 public class StudyGroupWithUsers {
-    private String id;
-    private String studyGroupName;
-    private String studyGroupDescription;
-    private String ownerId;
+    private java.lang.String id;
+    private java.lang.String studyGroupName;
+    private java.lang.String studyGroupDescription;
+    private java.lang.String ownerId;
     private List<User> members; // List of users instead of just IDs
 
     // Getters and Setters
-    public String getId() {
+    public java.lang.String getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(java.lang.String id) {
         this.id = id;
     }
 
-    public String getStudyGroupName() {
+    public java.lang.String getStudyGroupName() {
         return studyGroupName;
     }
 
-    public void setStudyGroupName(String studyGroupName) {
+    public void setStudyGroupName(java.lang.String studyGroupName) {
         this.studyGroupName = studyGroupName;
     }
 
-    public String getStudyGroupDescription() {
+    public java.lang.String getStudyGroupDescription() {
         return studyGroupDescription;
     }
 
-    public void setStudyGroupDescription(String studyGroupDescription) {
+    public void setStudyGroupDescription(java.lang.String studyGroupDescription) {
         this.studyGroupDescription = studyGroupDescription;
     }
 
-    public String getOwnerId() {
+    public java.lang.String getOwnerId() {
         return ownerId;
     }
 
-    public void setOwnerId(String ownerId) {
+    public void setOwnerId(java.lang.String ownerId) {
         this.ownerId = ownerId;
     }
 

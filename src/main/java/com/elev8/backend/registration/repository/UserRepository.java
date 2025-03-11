@@ -8,9 +8,11 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface UserRepository extends MongoRepository<User, String> {
-    Optional<User> findByUsername(String username);
-    boolean existsByUsername(String username);
-    List<User> findByCollegeName(String collegeName);
-    Optional<User> findById(String id);
+public interface UserRepository extends MongoRepository<User, java.lang.String> {
+    Optional<User> findByUsername(java.lang.String username);
+    boolean existsByUsername(java.lang.String username);
+    List<User> findByCollegeName(java.lang.String collegeName);
+    Optional<User> findById(java.lang.String id);
+
+    List<User> findAllById(List<User> userid);
 }

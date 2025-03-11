@@ -1,6 +1,5 @@
 package com.elev8.backend.hackathon.service;
 
-import com.elev8.backend.hackathon.dto.HackathonDTO;
 import com.elev8.backend.hackathon.dto.HackathonRequestDTO;
 import com.elev8.backend.hackathon.model.Hackathon;
 import com.elev8.backend.hackathon.model.HackathonRequest;
@@ -8,7 +7,6 @@ import com.elev8.backend.hackathon.repository.HackathonRepository;
 import com.elev8.backend.hackathon.repository.HackathonRequestRepository;
 import com.elev8.backend.registration.model.User;
 import com.elev8.backend.registration.repository.UserRepository;
-import com.mongodb.lang.Nullable;
 import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,7 +15,6 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
-import java.util.Stack;
 import java.util.stream.Collectors;
 
 @Service
@@ -62,12 +59,12 @@ public class HackathonRequestService {
                 return;
             }
 
-            String toEmail = hackathonCreator.getEmail();  // Send to hackathon creator
-            String subject = "🚀 New Hackathon Request: " + request.getHackathonTitle();
+            java.lang.String toEmail = hackathonCreator.getEmail();  // Send to hackathon creator
+            java.lang.String subject = "🚀 New Hackathon Request: " + request.getHackathonTitle();
 
-            String formattedDate = request.getRequestedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+            java.lang.String formattedDate = request.getRequestedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
 
-            String body = "<div style='font-family: Arial, sans-serif; color: #333; padding: 20px; border-radius: 8px; background-color: #f9f9f9;'>" +
+            java.lang.String body = "<div style='font-family: Arial, sans-serif; color: #333; padding: 20px; border-radius: 8px; background-color: #f9f9f9;'>" +
                     "<h2 style='color: #1a73e8; text-align: center;'>📢 Hackathon Request Notification</h2>" +
                     "<p>Dear <strong>" + hackathonCreator.getUsername() + "</strong>,</p>" +
                     "<p>You have received a new request to join your hackathon: <strong>" + request.getHackathonTitle() + "</strong> 🎯</p>" +
@@ -94,15 +91,15 @@ public class HackathonRequestService {
         return hackathonRequestRepository.findAll();
     }
 
-    public List<HackathonRequest> getHackathonByCreatedBy(String createdBy) {
+    public List<HackathonRequest> getHackathonByCreatedBy(java.lang.String createdBy) {
         return hackathonRequestRepository.findByCreatedBy(createdBy);
     }
 
-    public List<HackathonRequest> getHackathonByRequestedBy(String requestedBy) {
+    public List<HackathonRequest> getHackathonByRequestedBy(java.lang.String requestedBy) {
         return hackathonRequestRepository.findByRequestedBy(requestedBy);
     }
 
-    public HackathonRequest updateHackathonRequest(String id, String status) {
+    public HackathonRequest updateHackathonRequest(java.lang.String id, java.lang.String status) {
         // Retrieve the hackathon request; throw an exception if not found
         HackathonRequest hackathonRequest = hackathonRequestRepository.findById(id)
                 .orElse(null);
@@ -159,21 +156,21 @@ public class HackathonRequestService {
                 return;
             }
 
-            String toEmail = requestedUser.getEmail();  // Send email to the requester
+            java.lang.String toEmail = requestedUser.getEmail();  // Send email to the requester
             boolean isAccepted = request.getStatus().equalsIgnoreCase("Accepted");
-            String statusText = isAccepted ? "Accepted by " + hackathonCreator.getUsername() + " ✅" : "Rejected by " + hackathonCreator.getUsername() + " ❌";
-            String statusColor = isAccepted ? "#28a745" : "#dc3545";
-            String subject = "🚀 Hackathon Request " + statusText + " – " + request.getHackathonTitle();
+            java.lang.String statusText = isAccepted ? "Accepted by " + hackathonCreator.getUsername() + " ✅" : "Rejected by " + hackathonCreator.getUsername() + " ❌";
+            java.lang.String statusColor = isAccepted ? "#28a745" : "#dc3545";
+            java.lang.String subject = "🚀 Hackathon Request " + statusText + " – " + request.getHackathonTitle();
 
-            String formattedDate = request.getRequestedAt().format(DateTimeFormatter.ofPattern("EEEE, MMM dd, yyyy HH:mm"));
+            java.lang.String formattedDate = request.getRequestedAt().format(DateTimeFormatter.ofPattern("EEEE, MMM dd, yyyy HH:mm"));
 
             // Dynamic Header Message
-            String headerMessage = isAccepted ?
+            java.lang.String headerMessage = isAccepted ?
                     "<h2 style='color: #28a745; font-size: 24px;'>🎉 Welcome to the Team!</h2>" :
                     "<h2 style='color: #dc3545; font-size: 24px;'>⚠️ Hackathon Request Update!</h2>";
 
             // Body content
-            String body = "<div style='font-family: Arial, sans-serif; color: #333; max-width: 600px; margin: auto; padding: 20px; border-radius: 8px; border: 1px solid #ddd;'>" +
+            java.lang.String body = "<div style='font-family: Arial, sans-serif; color: #333; max-width: 600px; margin: auto; padding: 20px; border-radius: 8px; border: 1px solid #ddd;'>" +
                     headerMessage +
                     "<p style='font-size: 16px;'>Dear <strong>" + requestedUser.getUsername() + "</strong>,</p>" +
                     "<p style='font-size: 16px;'>Your request to join <strong>" + request.getHackathonTitle() + "</strong> has been " +
@@ -202,7 +199,7 @@ public class HackathonRequestService {
         }
     }
 
-    public HackathonRequest getHackathonRequestById(String id) {
+    public HackathonRequest getHackathonRequestById(java.lang.String id) {
         return hackathonRequestRepository.findById(id).orElse(null);
     }
 }

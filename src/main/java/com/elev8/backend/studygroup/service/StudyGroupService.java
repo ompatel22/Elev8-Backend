@@ -20,7 +20,7 @@ public class StudyGroupService {
     private final UserService userService;
     private final UserRepository userRepository;
 
-    public StudyGroup createStudyGroup(String studyGroup , String description ,String userId ,String imageUrl) {
+    public StudyGroup createStudyGroup(String studyGroup , String description , String userId , String imageUrl) {
         System.out.println("Inside createStudyGroup method");
         System.out.println(imageUrl);
 
@@ -39,7 +39,7 @@ public class StudyGroupService {
         return studyGroupEntity;
     }
 
-    public StudyGroup joinStudyGroup(String studyGroupName, String userId) {
+    public StudyGroup joinStudyGroup(java.lang.String studyGroupName, java.lang.String userId) {
 
         StudyGroup studyGroup = studyGroupRepository.findByStudyGroupName(studyGroupName);
 
@@ -50,7 +50,7 @@ public class StudyGroupService {
         if  (studyGroup.getMembersId().stream().anyMatch(memberId -> memberId.equals(userId))) {
             throw new RuntimeException("User is already a member of this study group");
         }
-        List<String> usersId = studyGroup.getMembersId();
+        List<java.lang.String> usersId = studyGroup.getMembersId();
         usersId.add(userId);
         studyGroup.setMembersId(usersId);
         studyGroupRepository.save(studyGroup);
@@ -62,7 +62,7 @@ public class StudyGroupService {
         return studyGroupRepository.findAll();
     }
 
-    public List<Message> getAllMessagesOfAStudyGroup(String studyGroupName) {
+    public List<Message> getAllMessagesOfAStudyGroup(java.lang.String studyGroupName) {
         StudyGroup studyGroupEntity = studyGroupRepository.findByStudyGroupName(studyGroupName);
         if (studyGroupEntity == null) {
             throw new RuntimeException("Study Group not found");
@@ -70,25 +70,25 @@ public class StudyGroupService {
         return studyGroupEntity.getMessages();
     }
 
-    public List<User> getAllUsersOfStudyGroup(String studyGroupName) {
+    public List<User> getAllUsersOfStudyGroup(java.lang.String studyGroupName) {
         StudyGroup studyGroupEntity = studyGroupRepository.findByStudyGroupName(studyGroupName);
         if (studyGroupEntity == null) {
             throw new RuntimeException("Study Group not found");
         }
-        List<String> usersId = studyGroupEntity.getMembersId();
+        List<java.lang.String> usersId = studyGroupEntity.getMembersId();
         return userRepository.findAllById(usersId);
     }
 
-    public User getOwnerOfStudyGroup(String studyGroupName) {
+    public User getOwnerOfStudyGroup(java.lang.String studyGroupName) {
         StudyGroup studyGroupEntity = studyGroupRepository.findByStudyGroupName(studyGroupName);
         if (studyGroupEntity == null) {
             throw new RuntimeException("Study Group not found");
         }
-        String userId = studyGroupEntity.getOwnerId();
+        java.lang.String userId = studyGroupEntity.getOwnerId();
         return userRepository.findById(userId).get();
     }
 
-    public boolean deleteStudyGroup(String studyGroupName, String userId) {
+    public boolean deleteStudyGroup(java.lang.String studyGroupName, java.lang.String userId) {
         StudyGroup studyGroupEntity = studyGroupRepository.findByStudyGroupName(studyGroupName);
         if (studyGroupEntity == null) {
             throw new RuntimeException("Study Group not found");
@@ -100,12 +100,12 @@ public class StudyGroupService {
         return false;
     }
 
-    public boolean removeStudyGroupMember(String studyGroupName, String userId) {
+    public boolean removeStudyGroupMember(java.lang.String studyGroupName, java.lang.String userId) {
         StudyGroup studyGroupEntity = studyGroupRepository.findByStudyGroupName(studyGroupName);
         if (studyGroupEntity == null) {
             throw new RuntimeException("Study Group not found");
         }
-        List<String> usersIds = studyGroupEntity.getMembersId();
+        List<java.lang.String> usersIds = studyGroupEntity.getMembersId();
         if(usersIds.contains(userId)) {
             usersIds.remove(userId);
             studyGroupEntity.setMembersId(usersIds);
@@ -114,10 +114,10 @@ public class StudyGroupService {
         }
         return false;
     }
-    public Optional<User> getUserOfStudyGroup(String studyGroupName, String userId) {
+    public Optional<User> getUserOfStudyGroup(java.lang.String studyGroupName, java.lang.String userId) {
         // Decode userId if it's Base64-encoded
         if (userId.contains("=")) {
-            userId = new String(Base64.getDecoder().decode(userId), StandardCharsets.UTF_8);
+            userId = new java.lang.String(Base64.getDecoder().decode(userId), StandardCharsets.UTF_8);
         }
 
         StudyGroup studyGroupEntity = studyGroupRepository.findByStudyGroupName(studyGroupName);
@@ -125,8 +125,8 @@ public class StudyGroupService {
             return Optional.empty();
         }
 
-        String finalUserId = userId;
-        Optional<String> membersId = studyGroupEntity.getMembersId()
+        java.lang.String finalUserId = userId;
+        Optional<java.lang.String> membersId = studyGroupEntity.getMembersId()
                 .stream()
                 .filter(memberId -> memberId.equals(finalUserId))
                 .findFirst();
@@ -136,7 +136,7 @@ public class StudyGroupService {
         }
         return Optional.empty();
     }
-    public Optional<StudyGroup> getStudyGroupDetail(String studyGroupName) {
+    public Optional<StudyGroup> getStudyGroupDetail(java.lang.String studyGroupName) {
         StudyGroup studyGroupEntity = studyGroupRepository.findByStudyGroupName(studyGroupName);
         if (studyGroupEntity == null) {
             return Optional.empty();

@@ -1,7 +1,6 @@
 package com.elev8.backend.studygroup.controller;
 import com.cloudinary.Cloudinary;
 import com.elev8.backend.collegechat.model.Message;
-import com.elev8.backend.hackathon.dto.HackathonDTO;
 import com.elev8.backend.registration.model.User;
 import com.elev8.backend.studygroup.dto.CreateStudyGroupDTO;
 import com.elev8.backend.studygroup.model.StudyGroup;
@@ -12,12 +11,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.net.URLDecoder;
-import java.nio.charset.StandardCharsets;
 
 @RequiredArgsConstructor
 @RestController
@@ -57,10 +53,10 @@ public class StudyGroupController {
 
     @PostMapping("/{studyGroupName}/join_study_group")
     public ResponseEntity<?> joinStudyGroup(
-            @PathVariable String studyGroupName,
-            @RequestBody Map<String, String> requestBody) {
+            @PathVariable java.lang.String studyGroupName,
+            @RequestBody Map<java.lang.String, java.lang.String> requestBody) {
 
-        String userId = requestBody.get("userId");
+        java.lang.String userId = requestBody.get("userId");
 
         if (userId == null) {
             return ResponseEntity.badRequest().body("userId is required");
@@ -83,7 +79,7 @@ public class StudyGroupController {
     }
 
     @GetMapping("/{study_group_name}/messages")
-    public ResponseEntity<List<Message>> getMessages(@PathVariable String study_group_name,
+    public ResponseEntity<List<Message>> getMessages(@PathVariable java.lang.String study_group_name,
                                                      @RequestParam(value = "page", defaultValue = "0", required = false) int page,
                                                      @RequestParam(value = "size", defaultValue = "20", required = false) int size) {
         List<Message> messages = this.studyGroupService.getAllMessagesOfAStudyGroup(study_group_name);
@@ -96,7 +92,7 @@ public class StudyGroupController {
     }
 
     @GetMapping("/{study_group_name}/users")
-    public ResponseEntity<List<User>> getAllUsersOfAStudyGroup(@PathVariable String study_group_name) {
+    public ResponseEntity<List<User>> getAllUsersOfAStudyGroup(@PathVariable java.lang.String study_group_name) {
         try{
             User owner = this.studyGroupService.getOwnerOfStudyGroup(study_group_name);
             List<User> users = this.studyGroupService.getAllUsersOfStudyGroup(study_group_name);
@@ -111,7 +107,7 @@ public class StudyGroupController {
     }
 
     @DeleteMapping ("/{studyGroupName}/delete/{userId}")
-    public ResponseEntity<?> deleteStudyGroup(@PathVariable String studyGroupName, @PathVariable String userId) {
+    public ResponseEntity<?> deleteStudyGroup(@PathVariable java.lang.String studyGroupName, @PathVariable java.lang.String userId) {
         try{
             boolean deleted = this.studyGroupService.deleteStudyGroup(studyGroupName, userId);
             return ResponseEntity.ok(deleted);
@@ -122,7 +118,7 @@ public class StudyGroupController {
     }
 
     @DeleteMapping("/{studyGroupName}/remove/{userId}")
-    public ResponseEntity<?> deleteUserOfStudyGroup(@PathVariable String studyGroupName, @PathVariable String userId) {
+    public ResponseEntity<?> deleteUserOfStudyGroup(@PathVariable java.lang.String studyGroupName, @PathVariable java.lang.String userId) {
         try{
             boolean deleted = this.studyGroupService.removeStudyGroupMember(studyGroupName, userId);
             return ResponseEntity.ok(deleted);
@@ -132,9 +128,9 @@ public class StudyGroupController {
         }
     }
     @GetMapping("/{studyGroupName}/user/{userId}")
-    public ResponseEntity<?> getUserOfStudyGroup(@PathVariable String studyGroupName, @PathVariable String userId) {
+    public ResponseEntity<?> getUserOfStudyGroup(@PathVariable java.lang.String studyGroupName, @PathVariable java.lang.String userId) {
         if (userId.contains("=")) {
-            userId = new String(Base64.getDecoder().decode(userId), StandardCharsets.UTF_8);
+            userId = new java.lang.String(Base64.getDecoder().decode(userId), StandardCharsets.UTF_8);
         }
         Optional<User> user = studyGroupService.getUserOfStudyGroup(studyGroupName, userId);
         if (user.isEmpty()) {
@@ -144,7 +140,7 @@ public class StudyGroupController {
     }
 
     @GetMapping("/detail/{studyGroupName}")
-    public ResponseEntity<?> getStudyGroupDetail(@PathVariable String studyGroupName) {
+    public ResponseEntity<?> getStudyGroupDetail(@PathVariable java.lang.String studyGroupName) {
         try {
             Optional<StudyGroup> studyGroup = studyGroupService.getStudyGroupDetail(studyGroupName);
             if (studyGroup.isEmpty()) {

@@ -17,7 +17,7 @@ import java.util.Optional;
 public class PersonalChatService {
     private final PersonalChatRepository personalChatRepository;
     private final UserRepository userRepository;
-    public PersonalChat createOrGetPersonalChat(String member1Id, String member2Id) {
+    public PersonalChat createOrGetPersonalChat(java.lang.String member1Id, java.lang.String member2Id) {
         Optional<PersonalChat> existingChat = personalChatRepository.findByMemberIds(member1Id, member2Id);
         if (existingChat.isPresent()) {
             return existingChat.get();
@@ -35,13 +35,13 @@ public class PersonalChatService {
         return personalChatRepository.save(personalChat);
     }
 
-    public List<Message> getPersonalChatMessages(String member1Id, String member2Id) {
+    public List<Message> getPersonalChatMessages(java.lang.String member1Id, java.lang.String member2Id) {
         return personalChatRepository.findByMemberIds(member1Id, member2Id)
                 .map(PersonalChat::getMessages)
                 .orElse(Collections.emptyList());
     }
 
-    public List<PersonalChat> getPersonalChatsOfaMember(String memberId){
+    public List<PersonalChat> getPersonalChatsOfaMember(java.lang.String memberId){
             List<PersonalChat> personalChats = personalChatRepository.findByMember1IdOrMember2Id(memberId, memberId);
             return personalChats;
     }

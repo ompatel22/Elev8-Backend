@@ -6,7 +6,6 @@ import com.elev8.backend.registration.repository.UserRepository;
 import com.elev8.backend.registration.exception.UserAlreadyExistsException;
 import com.elev8.backend.registration.exception.InvalidCredentialsException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -26,15 +25,16 @@ public class UserService {
             throw new UserAlreadyExistsException("Username already exists: " + user.getUsername());
         }
         List<User> users = this.userRepository.findByCollegeName(user.getCollegeName());
+        User user1 = userRepository.save(user);
         if (users.isEmpty()) {
-            this.roomService.createRoom(user.getCollegeName(), user);
+            this.roomService.createRoom(user.getCollegeName(), user1.getId());
         }
-        this.roomService.joinRoom(user.getCollegeName(), user);
-        return userRepository.save(user);
+        this.roomService.joinRoom(user.getCollegeName(), user1.getId());
+        return user1;
     }
 
     // Authenticate user (login)
-    public User authenticateUser(String username, String password) {
+    public User authenticateUser(java.lang.String username, java.lang.String password) {
         Optional<User> userOptional = userRepository.findByUsername(username);
 
         if (userOptional.isEmpty()) {
@@ -52,12 +52,12 @@ public class UserService {
     }
 
     // Get user details by username
-    public User getUserByUsername(String username) {
+    public User getUserByUsername(java.lang.String username) {
         return userRepository.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("User not found: " + username));
     }
 
-    public User updateUser(User user, String username) {
+    public User updateUser(User user, java.lang.String username) {
         Optional<User> userOptional = userRepository.findByUsername(username);
         if (userOptional.isPresent()) {
             User userToUpdate = userOptional.get();
@@ -126,14 +126,14 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    public List<String> getAllUsersId(){
+    public List<java.lang.String> getAllUsersId(){
         return userRepository.findAll().stream().map(User::getId).collect(Collectors.toList());
     }
 
-    public List<User> getAllUsersById(List<String> usersid) {
-        return userRepository.findAllById(usersid);
+    public List<User> getAllUsersById(List<String> userid) {
+        return userRepository.findAllById(userid);
     }
-    public Optional<User> getUserById(String id) {
+    public Optional<User> getUserById(java.lang.String id) {
         return userRepository.findById(id);
     }
 }

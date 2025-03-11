@@ -44,7 +44,7 @@ public class UserController {
 
     // Get user details
     @GetMapping("/{username}")
-    public ResponseEntity<?> getUserDetails(@PathVariable String username) {
+    public ResponseEntity<?> getUserDetails(@PathVariable java.lang.String username) {
         try {
             User user = userService.getUserByUsername(username);
             //System.out.println(user);
@@ -61,7 +61,7 @@ public class UserController {
     }
 
     @PutMapping("/{username}")
-    public ResponseEntity<?> updateUserByUsername(@RequestBody User user, @PathVariable String username) {
+    public ResponseEntity<?> updateUserByUsername(@RequestBody User user, @PathVariable java.lang.String username) {
         User user1=userService.updateUser(user, username);
         if(user1==null) {
             return ResponseEntity.badRequest().body("User not found.");
