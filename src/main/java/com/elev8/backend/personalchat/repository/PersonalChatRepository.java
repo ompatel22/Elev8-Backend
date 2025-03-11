@@ -1,5 +1,6 @@
 package com.elev8.backend.personalchat.repository;
 
+import com.elev8.backend.collegechat.model.Message;
 import com.elev8.backend.personalchat.model.PersonalChat;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;

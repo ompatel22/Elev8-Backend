@@ -5,6 +5,7 @@ import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -14,5 +15,5 @@ public class PersonalChat {
     private String id;
     private String member1Id;
     private String member2Id;
-    private List<Message> messages;
+    private List<Message> messages = new ArrayList<>()  ;
 }
