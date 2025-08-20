@@ -81,7 +81,7 @@ To get a local copy up and running, follow these simple steps.
 
 - Java 17 or higher
 - Maven 3.6+
-- MongoDB (local or cloud instance)
+- MongoDB
 
 ### Installation Steps
 
