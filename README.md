@@ -35,13 +35,13 @@ Integration with platforms like GitHub, LeetCode, CodeChef etc. to showcase codi
 - **Personal Chat**: Direct, private messaging between users.
 - **Hackathon Chat**: Group chat for hackathon team communication.
 
-## 🚀 Technologies Used
+## 🚀  Technologies Used
 
 - **Vite**: A next-generation frontend tooling that provides a faster and leaner development experience.
 - **React.js**: A JavaScript library for building user interfaces.
 - **Tailwind CSS**: A utility-first CSS framework for rapid UI development.
 
-## 📸 Screenshots
+## 📸  Screenshots
 
 **Profile Creation:**
 <img width="1920" height="1106" alt="Screenshot 2025-04-25 at 11 15 14 AM" src="https://github.com/user-attachments/assets/051eb053-b37c-4b15-b8b8-2995c20befe2" />
