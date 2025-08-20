@@ -1,6 +1,6 @@
 # Elev8 - Backend
 
-Elev8 is a dynamic digital platform designed to empower students by providing a unified ecosystem for academic collaboration, hackathon exploration, and community learning. This repository contains the source code for the backend API, built with Spring Boot and MongoDB.
+Elev8 is a dynamic digital platform designed to empower students by providing a unified ecosystem for academic collaboration, hackathon exploration, and community learning. This repository contains the source code for the backend APIs, built with Spring Boot and MongoDB.
 
 ## ✨ Key Features
 
