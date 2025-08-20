@@ -36,10 +36,11 @@ Integration with platforms like GitHub, LeetCode, CodeChef etc. to showcase codi
 - **Hackathon Chat**: Group chat for hackathon team communication.
 
 ## 🚀  Technologies Used
-
-- **Vite**: A next-generation frontend tooling that provides a faster and leaner development experience.
-- **React.js**: A JavaScript library for building user interfaces.
-- **Tailwind CSS**: A utility-first CSS framework for rapid UI development.
+- **Spring Boot**: Java-based framework for building production-ready applications
+- **MongoDB**: NoSQL database for flexible data storage
+- **Cloudinary**: To store Images on Cloud
+- **WebSocket**: Real-time bidirectional communication
+- **Maven**: Dependency management and build tool
 
 ## 📸  Screenshots
 
